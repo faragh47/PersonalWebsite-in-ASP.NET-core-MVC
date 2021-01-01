@@ -1,0 +1,524 @@
+﻿@{
+    ViewData["Title"] = "Solid";
+    Layout = "~/Views/Shared/_LayoutPosts.cshtml";
+}
+
+
+<body data-spy="scroll" data-target="#pb-navbar" data-offset="200">
+
+
+    <section class="site-service-item badge-dark" style="height:100px;"></section>
+
+
+    <section class="site-form" >
+        <div class="container">
+            <div row align-items-center>
+                <div class="col-8 mx-auto h-10">
+
+                    <img src="~/images/solid.png" class="img-fluid my-3">
+                    <h2 class="m-3"><strong>SOLID Design principles C#</strong></h2>
+                    <h5 class="m-4">
+                        <b>S.O.L.I.D</b> is an acronym for the first five <b>object-oriented design(OOD)</b> principles. These principles, when combined together, make it easy for a programmer to develop software that are easy to maintain and extend. They also make it easy for developers to avoid code smells, easily refactor code, and are also a part of the agile or adaptive software development.
+                    </h5>
+                    <h5 class="mx-md-5 my-3">
+                        1. SRP The Single Responsibility Principle:  a class should have one, and only one, reason to change, meaning that a class should have only one job.
+                    </h5>
+                    <h5 class="mx-md-5 my-3">
+                        2. OCP The Open Closed Principle:  you should be able to extend a class’s behavior, without modifying it.
+                    </h5>
+                    <h5 class="mx-md-5 my-3">
+                        3. LSP The Liskov Substitution Principle:  If any module is using a Base class then the reference to that Base class can be replaced with a Derived class without affecting the functionality of the module.
+                    </h5>
+
+                    <h2 class="m-3 my-4"><strong>Single Responsibilty Principle:</strong></h2>
+
+                    <img src="~/images/srp.png" class="img-fluid my-3">
+                    <h5 class="m-3 mx-4">One Class should be responsible for one task.</h5>
+                    <pre class="m-3 my-4" style="background-color:lightgray;">class DataAccess
+{
+    public static void InsertData(){
+        Console.WriteLine("Data inserted into database successfully");
+        Console.WriteLine( "Logged Time:" + DateTime.Now.ToLongTimeString() + " Log  Data insertion completed successfully");
+                                    }
+}</pre>
+                    <h5 class="m-3 mx-4">
+                        So tomorrow if you want add a new logging like event viewer or File I/O then we need to go and change the “DataAccess”class, which is not right.
+                        It’s like if “JOHN” has a problem why do I need to check “BOB”.
+                    </h5>
+                    <pre class="m-3 my-4" style="background-color:lightgray;">
+// Data access class is only responsible for data base related operations 
+class DataAccess 
+{ 
+    public static void InsertData() 
+    { 
+        Console.WriteLine("Data inserted into database successfully"); 
+    } 
+} 
+// Logger class is only responsible for logging related operations 
+class Logger 
+{ 
+    public static void WriteLog() 
+    { 
+        Console.WriteLine( "Logged Time:"  + DateTime.Now.ToLongTimeString() + " Log  Data insertion completed successfully"); 
+    } 
+}
+</pre>
+                    <h2 class="m-3 my-3"><strong>Open Closed Principle:</strong></h2>
+                    <img src="~/images/openclosed.png" class="img-fluid my-3">
+
+                    <h5 class="m-3 my-3">
+                        we should strive to write code that doesn’t have to be changed every time the requirements change. How we do that can differ a bit depending on the context, such as our programming language.
+                        Create a Base class with Required functionality, and ensure we will not modify that class. (Closed for modification)
+                        Create a Derived class by inheriting the Base class for extension (Open for modification).
+                    </h5>
+                    <pre class="m-3 my-4" style="background-color:lightgray;">
+public class Rectangle
+{
+    public double Width { get; set; }
+    public double Height { get; set; }
+}
+public class AreaCalculator
+{
+    public double Area(Rectangle[] shapes)
+    {
+        double area = 0;
+        foreach (var shape in shapes)
+        {
+            area += shape.Width*shape.Height;
+        }
+
+        return area;
+    }
+}
+</pre>
+                    <h5 class="m-3 my-3">If we want to calculate the area of not only rectangles but of circles as well.</h5>
+                    <pre class="m-3 my-4" style="background-color: lightgray">
+public double Area(object[] shapes)
+{
+    double area = 0;
+    foreach (var shape in shapes)
+    {
+        if (shape is Rectangle)
+        {
+            Rectangle rectangle = (Rectangle) shape;
+            area += rectangle.Width*rectangle.Height;
+        }
+        else
+        {
+            Circle circle = (Circle)shape;
+            area += circle.Radius * circle.Radius * Math.PI;
+        }
+    }
+
+    return area;
+}
+</pre>
+                    <h5 class="m-3 my-3">
+                        AreaCalculator isn’t closed for modification as we need to change it in order to extend it. Or in other words: it isn’t open for extension. In a real world scenario where the code base is ten, a hundred or a thousand times larger and modifying the class means redeploying it’s assembly/package.
+
+                    </h5>
+                    <h5 class="m-3 my-3">
+                        One way of solving this puzzle would be to create a base class for both rectangles and circles as well as any other shapes which defines an abstract method for calculating it’s area.
+                    </h5>
+                    <pre class="m-3 my-4" style="background-color: lightgray">
+public abstract class Shape
+{
+    public abstract double Area();
+}
+public class Rectangle : Shape
+{
+    public double Width { get; set; }
+    public double Height { get; set; }
+    public override double Area()
+    {
+        return Width*Height;
+    }
+}
+public class Circle : Shape
+{
+    public double Radius { get; set; }
+    public override double Area()
+    {
+        return Radius*Radius*Math.PI;
+    }
+}
+</pre>
+                    <h5 class="m-3 my-3">
+                        As we’ve moved the responsibility of actually calculating the area away from AreaCalculator’s Area method it is now much simpler and robust as it can handle any type of Shape that we throw at it.
+
+                    </h5>
+                    <pre class="m-3 my-4" style="background-color: lightgray"> public double Area(Shape[] shapes)
+{
+    double area = 0;
+    foreach (var shape in shapes)
+    {
+        area += shape.Area();
+    }
+    return area;
+}      
+</pre>
+                    <h2 class="mx-3 my-3"><strong>Liskov Substitution Principle:</strong></h2>
+                    <img src="~/images/linskov.png" class="img-fluid my-3">
+                    <h5 class="mx-3 my-3">If any module is using a Base class then the reference to that Base class can be replaced with a Derived class without affecting the functionality of the module.</h5>
+
+                    <h5 class="mx-3 my-3">
+                        we must make sure that new derived classes are extending the base classes without changing their behavior. If we are calling a method defined at a base class upon an abstracted class, the function must be implemented properly on the subtype class.
+                    </h5>
+                    <h5 class="mx-3 my-3">
+                        Let’s say our system wants to calculate discounts for Enquiries. Now Enquiries are not actual customer’s they are just leads. Because they are just leads we do not want to save them to database for now.
+                    </h5>
+                    <h5 class="mx-3 my-3">
+                        So we create a new class called as Enquiry which inherits from the “Customer” class. We provide some discounts to the enquiry so that they can be converted to actual customers and we override the “Add’ method with an exception so that no one can add an Enquiry to the database.
+                    </h5>
+                    <pre class="m-3 my-4" style="background-color: lightgray">
+class Enquiry : Customer
+    {
+        public override double getDiscount(double TotalSales)
+        {
+            return base.getDiscount(TotalSales) - 5;
+        }
+
+        public override void Add()
+        {
+            throw new Exception("Not allowed");
+        }
+    }
+</pre>
+
+                    <h5 class="m-3 my-3">
+                        So as per polymorphism rule parent “Customer” class object can point to any of it child class objects i.e. “Gold”, “Silver” or “Enquiry” during runtime without any issues.
+                    </h5>
+                    <pre class="m-3 my-3" style="background-color:lightgray">
+List<Customer> Customers = new List<Customer>();
+Customers.Add(new SilverCustomer());
+Customers.Add(new goldCustomer());
+Customers.Add(new Enquiry());
+
+ foreach (Customer o in Customers)
+ {
+                o.Add(); //throw exception for Enquiry
+ }
+                    </pre>
+
+                    <h5 class="m-3 my-3">
+                        As per the inheritance hierarchy the “Customer” object can point to any one of its child objects and we do not expect any unusual behavior.
+                    </h5>
+
+                    <h5 class="m-3 my-3">
+                        But when “Add” method of the “Enquiry” object is invoked it leads to exception. In other words the “Enquiry” has discount calculation , it looks like a “Customer” but IT IS NOT A CUSTOMER. So the parent cannot replace the child object seamlessly. In other words “Customer” is not the actual parent for the “Enquiry”class. “Enquiry” is a different entity altogether.
+
+                    </h5>
+                    <pre class="m-3 my-3" style="background-color:lightgray">
+interface IDiscount
+{
+        double getDiscount(double TotalSales);
+}
+
+
+interface IDatabase
+{
+        void Add();
+}
+class Enquiry : IDiscount
+    {
+        public  double getDiscount(double TotalSales)
+        {
+            return TotalSales - 5;
+        }
+    }
+class Customer : IDiscount, IDatabase
+   {
+       public virtual void Add()
+       {
+               // Database code goes here  
+       }
+
+       public virtual double getDiscount(double TotalSales)
+       {
+           return TotalSales;
+       }
+   }
+                    </pre>
+                    <h5 class="m-3 my-3">
+                        In case we make a mistake of adding “Enquiry” class to the list compiler would complain.
+                    </h5>
+                    <pre class="m-3 my-3" style="background-color:lightgray">
+List<Customer> Customers = new List<Customer>();
+Customers.Add(new SilverCustomer());
+Customers.Add(new goldCustomer());
+Customers.Add(new Enquiry());//error
+                    </pre>
+
+                    <h2 class="mx-3 my-3"><strong>Interface Segregation Principle:</strong></h2>
+                    <img src="~/images/interface.png" class="img-fluid my-3">
+
+
+                    <h5 class="m-3 my-3">Clients should not be forced to depend upon interfaces that they do not use.</h5>
+                    <pre class="m-3 my-3" style="background-color:lightgray">
+interface IToy {
+void setPrice(int price);
+void setColor(String color);
+void move();
+void fly();
+}
+class ToyHouse :IToy {
+int price;
+String color;
+public void setPrice(double price) {
+this.price = price;
+}
+public void setColor(String color) {
+this.color=color;
+}
+public void move(){
+ throw new Exception(“Not allowed”);
+}
+public void fly(){
+throw new Exception(“Not allowed”);
+}
+}
+                    </pre>
+
+                    <h5 class="m-3 my-3"> <code>ToyHouse</code>  needs to provide implementation of the <code>move()</code> and <code>fly()</code> methods, even though it does not require them. This is a violation of the Interface Segregation Principle. Such violations affect code readability and confuse programmers. Violation of the Interface Segregation Principle also leads to violation of the complementary Open Closed Principle. As an example, consider that the Toy interface is modified to include a <code>  walk() </code> method to accommodate toy robots. As a result, you now need to modify all existing Toy implementation classes to include a <code>walk()</code>  method even if the toys don’t walk. In fact, the Toy implementation classes will never be closed for modifications, which will lead to a fragile application that is difficult and expensive to maintain.</h5>
+
+                    <h5 class="m-3 my-3">
+                        By following the Interface Segregation Principle, you can address the main problem of the <code>toy</code>  building application- The <code>Toy</code> interface forces clients (implementation classes) to depend on methods that they do not use.
+                    </h5>
+                    <h5 class="m-3 my-3">
+                        The solution is- Segregate the <code>Toy</code> interface into multiple role interfaces each for a specific behavior. Let’s segregate the <code>Toy</code>  interface, so that our application now have three interfaces: <code>Toy</code>, <code>Movable</code>, and <code>Flyable</code>.
+                    </h5>
+                    <pre class="m-3 my-3" style="background-color:lightgray">
+interface IToy {
+void setPrice(int price);
+void setColor(String color);
+}
+interface IMovable {
+void move();
+}
+interface IFlyable {
+void fly();
+} </pre>
+
+                    <h5 class="m-3 my-3">
+                        As all toys will have a price and color, all Toy implementation classes can implement this interface. Then, we wrote the Movable and Flyable interfaces to represent moving and flying behaviors in toys.
+                    </h5>
+                    <pre class="m-3 my-3" style="background-color:lightgray">
+class ToyHouse :IToy {
+int price;
+String color;
+public void setPrice(double price) {
+this.price = price;
+}
+public void setColor(String color) {
+this.color=color;
+}
+}
+Class ToyPlane implements IToy, IMovable, IFlyable {
+double price;
+String color;
+public void setPrice(int price) {
+this.price = price;
+}
+public void setColor(String color) {
+this.color=color;
+}
+public void move(){//code related to moving plane}
+public void fly(){// code related to flying plane}
+} </pre>
+
+                    <h5 class="m-3 my-3">
+                        There are times when you might need your interface to have multiple methods, and that’s ok.
+                        <strong>
+                            Include methods which are all very
+                            specific to the interface and the client will most likely want to interact with them, therefore packaging them together in the same interface is the right thing to do.
+                        </strong>
+                    </h5>
+                    <h2 class="mx-3 my-3"><strong> Dependency Inversion Principle :</strong></h2>
+                    <img src="~/images/DI.png" class="img-fluid my-3" style="width:100%;">
+
+                    <h5 class="m-3 my-3">
+                        Entities must depend on abstractions not on concretions. It states that the high level module must not depend on the low level module, but they should depend on abstractions.Abstractions should not depend on details. Details should depend on abstractions
+                    </h5>
+                    <h2 class="mx-3 my-3"><strong>Inversion of Control :</strong></h2>
+
+                    <h5 class="m-3 my-3">
+                        With traditional programming,
+                        the main function of an application might make function calls into a menu library to display a list of available commands and query the user to select one.
+                        The library thus would return the chosen option as the value of the function call, and the main function uses this value to execute the associated command.
+                        In this interaction, my code is in control: it decides when to ask questions, when to read responses, and when to process those results.
+                    </h5>
+
+                    <h5 class="m-3 my-3">
+                        With inversion of control, on the other hand, the program would be written using a software framework that knows common behavioral and graphical elements, such as windowing systems, menus, controlling the mouse, and so on.
+                        The custom code “fills in the blanks” for the framework, such as supplying a table of menu items and registering a code subroutine for each item,
+                        but it is the framework that monitors the user’s actions and invokes the subroutine when a menu item is selected.
+                    </h5>
+                    <h5 class="m-3 my-3">
+                        In the command line form I control when these methods are called, but in the window example I don’t. Instead I hand control over to the windowing system.
+                        It then decides when to call my methods, based on the bindings I made when creating the form.
+                        <strong>
+                            The control is inverted - it calls me rather me calling the framework. This phenomenon is Inversion of Control (also known as the Hollywood Principle - "Don't call us, we'll call you").
+                        </strong>
+                    </h5>
+                    <h5 class="m-3 my-3">
+                        So rather than the internal program controlling the flow, events drive the program flow. Event flow approach is more flexible as their no direct invocation which leads to more flexibility.
+                        You can delegate the control flow by callback delegates, observer pattern, events, DI (Dependency injection) and lot of other ways.
+                    </h5>
+                    <img src="~/images/inversion.jpg" class="img-fluid" style=" display: block;margin-left: auto;margin-right: auto; margin-top:5%;">
+                    <h5 class="m-3 my-4">
+                        <b>Problem:</b> You have classes that have dependencies on services or components whose concrete type is specified at design time. In this example,
+                        ClassA has dependencies on ServiceA and ServiceB. Figure 1 illustrates this.
+                    </h5>
+                    <img src="~/images/inversion1.png" class="img-fluid" style=" display: block;margin-left: auto; margin-right: auto; margin-top:5%; ">
+
+                    <h5 class="m3  my-4">
+                        This situation has the following problems:
+                    </h5>
+
+                    <h5 class="mx-5  my-4">
+                        &#8226;  To replace or update the dependencies, you need to change your classes’ source code.
+                    </h5>
+                    <h5 class="mx-5 my-4">
+                        &#8226;  The concrete implementations of the dependencies have to be available at compile time.
+                    </h5>
+                    <h5 class="mx-5  my-4">
+                        &#8226;  Your classes are difficult to test in isolation because they have direct references to dependencies.
+                        This means that these dependencies cannot be replaced with stubs or mocks.
+                    </h5>
+                    <h5 class="mx-5  my-4">
+                        &#8226;  Your classes contain repetitive code for creating, locating, and managing their dependencies.
+                    </h5>
+
+                    <h5 class="m3  my-4">
+                        Any of the following conditions justifies using the solution described in this pattern:
+                    </h5>
+
+                    <h5 class="mx-5  my-4">
+                        &#8226; You want to decouple your classes from their dependencies so that the dependencies can be replaced or updated with minimal or no changes to your classes’ source code.
+                    </h5>
+                    <h5 class="mx-5 my-4">
+                        &#8226;  You want to write classes that depend on classes whose concrete implementations are not known at compile time.
+                    </h5>
+                    <h5 class="mx-5  my-4">
+                        &#8226; You want to test your classes in isolation, without using the dependencies.
+                    </h5>
+                    <h5 class="mx-5  my-4">
+                        &#8226;  You want to decouple your classes from being responsible for locating and managing the lifetime of dependencies.
+                    </h5>
+
+                    <h2 class="m-3 my-3"><strong>Solution:</strong></h2>
+
+                    <h5 class="m-3  my-4">
+                        Delegate the function of selecting a concrete implementation type for the classes’ dependencies to an external component or source.
+                    </h5>
+
+                    <h2 class="m-3 my-3"><strong>Implementation Details</strong></h2>
+
+                    <h5 class="m-3  my-4">
+                        The Inversion of Control pattern can be implemented in several ways. The Dependency Injection pattern and the Service Locator pattern are specialized versions of this pattern that delineate different implementations. Figure 2 illustrates the conceptual view of both patterns.
+                    </h5>
+                    <img src="~/images/inversion2.png" class="img-fluid" style=" display: block;margin-left: auto; margin-right: auto; margin-top:5%; ">
+
+                    <h2 class="m-3 my-3"><strong>Service Locator:</strong></h2>
+
+                    <h5 class="m-3 my-3">
+                        Create a service locator that contains references to the services and that encapsulates the logic to locate them. In your classes,
+                        <strong>
+                            use the service locator to obtain service instances.
+                        </strong>
+                        The service locator does not instantiate the services. It provides a way to
+                        <strong>
+                            register services and it holds references to the services.
+                        </strong>
+                        After the service is registered, the service locator can find the service.
+
+                    </h5>
+                    <pre class="m-3 my-3" style="background-color:lightgray"> public interface IServiceLocator { T GetService<T>(); } </pre>
+                    <h5 class="m-3  my-4">
+                        Now let’s see a very simple implementation of this contract:
+                    </h5>
+
+                    <pre class="m-3 my-3" style="background-color:lightgray">class ServiceLocator : IServiceLocator {  
+// map that contains pairs of interfaces and  
+// references to concrete implementations  
+private IDictionary<object, object> services;   
+internal ServiceLocator()  {   
+services = new Dictionary<object, object>();    // fill the map   this.services.Add(typeof(IServiceA), new ServiceA());   this.services.Add(typeof(IServiceB), new ServiceB());   this.services.Add(typeof(IServiceC), new ServiceC());  
+}
+public T GetService<T>()  {   
+try   {    
+return (T)services[typeof(T)];   
+}   
+catch (KeyNotFoundException)   {    
+throw new ApplicationException("The requested service is not registered");   
+}  
+} 
+}</pre>
+
+                    <h5 class="m-3 my-3">
+                        The generic GetService() method
+                        <strong>
+                            returns a reference the correct implementation fetching it from the dictionary .
+                        </strong>
+                        This is how a client would invoke the service:
+
+
+                    </h5>
+                    <pre class="m-3 my-3" style="background-color:lightgray">IServiceLocator locator = new ServiceLocator();</pre>
+
+                    <pre class="m-3 my-3" style="background-color:lightgray">IServiceA myServiceA = locator.GetService<IServiceA>();</pre>
+
+                    <h5 class="m-3  my-4">
+                        The clients do not know the actual classes implementing the service.
+                        They only have to interact with the service locator to get to an implementation.
+                    </h5>
+                    <h2 class="m-3 my-3"><strong>Dependency Injection:</strong></h2>
+
+                    <h5 class="m-3  my-4">
+                        Declaratively express dependencies in your class definition.
+                        Use a Builder object to obtain valid instances of your object’s dependencies and pass them to your object during the object’s creation and/or initialization.
+                    </h5>
+
+                    <pre class="m-3 my-3" style="background-color:lightgray">public class ManagementController : Controller
+{
+  private readonly ITenantStore tenantStore;
+
+  public ManagementController(ITenantStore tenantStore)
+  {
+    this.tenantStore = tenantStore;
+  }
+
+  public ActionResult Index()
+  {
+    var model = new TenantPageViewData<IEnumerable<string>>
+        (this.tenantStore.GetTenantNames())
+    {
+      Title = "Subscribers"
+    };
+    return this.View(model);
+  }
+}</pre>
+
+                    <h5 class="m-3  my-4">
+                        <code>ManagementController</code> constructor receives an  <code>ITenantStore</code>  instance as a parameter,
+                        injected by some other class. The only dependency in the <code>ManagementController</code> class is on the interface type.
+                        This is better because it doesn’t have any knowledge of the class or component that is responsible for instantiating the <code>ITenantStore</code>  object.
+                    </h5>
+                    <img src="~/images/inversion3.png" class="img-fluid" style=" display: block;margin-left: auto; margin-right: auto; margin-top:5%; ">
+                    <h5 class="m-3  my-4">
+                        The class that is responsible for instantiating the <code>TenantStore</code> object and inserting it into the <code> ManagementController </code> class is called the <code>DependencyInjectionContainer</code> class.
+</h5>
+                </div>
+
+            </div>
+
+
+
+        </div>
+    </section>
+
+
+
+
+
+</body>

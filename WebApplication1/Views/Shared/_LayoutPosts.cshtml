@@ -1,0 +1,122 @@
+﻿
+@{
+    ViewData["Title"] = "_Layout";
+}
+
+
+
+<html>
+<head>
+
+    <link rel="stylesheet" href="~/content/css/animate.css">
+    <link rel="stylesheet" href="~/content/css/flexslider.css">
+    <link rel="stylesheet" href="fonts/icomoon/style.css">
+
+    <link rel="stylesheet" href="~/content/css/bootstrap.css">
+    <link rel="stylesheet" href="~/content/css/style.css">
+
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,700" rel="stylesheet">
+
+</head>
+
+
+<body>
+    @RenderBody()
+
+
+
+    <nav class="navbar navbar-expand-lg site-navbar navbar-light bg-light" id="pb-navbar">
+
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample09" aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <a class="navbar-brand" href="@Url.Action("Index", "Home")">MRF Soft</a>
+            <div class="collapse navbar-collapse justify-content-md-center" style="position: relative; right: 7.5%;" id="navbarsExample09">
+
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="@Url.Action("Index", "Home")">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#section-posts">Posts</a></li>
+                    <li class="nav-item"><a class="nav-link" href="@Url.Action("About", "Home")">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="@Url.Action("Contact", "Home")">Contact</a></li>
+
+                </ul>
+
+            </div>
+        </div>
+
+
+
+
+    </nav>
+
+    @*<div class="col-md-7 mb-5 mb-md-0" style="background-color:red;">
+
+
+            <div class="form-group">
+                <input type="text" class="form-control px-3 py-4" placeholder="Your Name">
+            </div>
+        </div>*@
+<footer class="site-footer">
+    <section class="site-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7 mb-5">
+                    <form action="" class="site-form">
+                        <h3 class="mb-5">Comments</h3>
+                        <div class="form-group">
+                            <input type="text" class="form-control px-3 py-4" placeholder="Your Name">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control px-3 py-4" placeholder="Your Email*">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control px-3 py-4" placeholder="Your Phone">
+                        </div>
+                        <div class="form-group mb-5">
+                            <textarea class="form-control px-3 py-4" cols="30" rows="3" placeholder="Write a Message"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-primary  px-4 py-3" value="Comments">
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="row mb-3">
+            <div class="col-md-12 text-center">
+                <p>
+                    <a href="https://github.com/faragh47" class="social-item"><span class="icon-github2"></span></a>
+                    <a href="https://www.instagram.com/mamarezafaa/" class="social-item"><span class="icon-instagram2"></span></a>
+                    <a href="telegram.me/mamarezafa" class="social-item"><span class="icon-telegram"></span></a>
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+</footer>
+
+
+    <script src="js/vendor/jquery.min.js"></script>
+    <script src="js/vendor/popper.min.js"></script>
+    <script src="js/vendor/bootstrap.min.js"></script>
+
+    <script src="js/vendor/jquery.easing.1.3.js"></script>
+    <script src="js/vendor/jquery.stellar.min.js"></script>
+    <script src="js/vendor/jquery.waypoints.min.js"></script>
+
+    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+    <script src="js/custom.js"></script>
+
+    <!-- Google Map -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+    <script src="js/google-map.js"></script>
+</body>
+</html>
